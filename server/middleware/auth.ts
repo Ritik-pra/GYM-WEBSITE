@@ -1,5 +1,6 @@
-import jwt, { Secret } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import jwt, { Secret } from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import { log } from "console";
 
 declare global {
   namespace Express {
@@ -15,13 +16,14 @@ export const verifyToken = async (
   next: NextFunction
 ) => {
   try {
-    let token = req.header('Authorization');
+    let token = req.header("Authorization");
+    console.log("working");
 
     if (!token) {
-      return res.status(403).send('Access Denied');
+      return res.status(403).send("Access Denied");
     }
 
-    if (token.startsWith('Bearer')) {
+    if (token.startsWith("Bearer")) {
       token = token.slice(7, token.length).trimLeft();
     }
 
@@ -32,7 +34,7 @@ export const verifyToken = async (
     if (err instanceof Error) {
       res.status(500).json({ error: err.message });
     } else {
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: "An error occurred" });
     }
   }
 };

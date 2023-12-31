@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model } from "mongoose";
 
 export interface ContactInfoType extends Document {
   fullName: string;
@@ -34,7 +34,7 @@ const ContactInfoSchema = new mongoose.Schema<ContactInfoType>(
 ContactInfoSchema.index({ email: 1 }, { unique: false });
 
 const ContactInfo: Model<ContactInfoType> = mongoose.model(
-  'ContactInfo',
+  "ContactInfo",
   ContactInfoSchema
 );
 export default ContactInfo;

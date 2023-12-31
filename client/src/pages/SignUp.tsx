@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { scrollTop } from 'utils/helpers/scrollTopHelper';
-import Footer from 'components/structure/Footer/Footer';
-import SmallButton from 'components/globals/buttons/SmallButton';
-import Input from 'components/globals/Input';
-import { signup } from 'data/pages/LogData';
-import { useDispatch } from 'react-redux';
-import { setLogin } from '../state/authSlice';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { scrollTop } from "utils/helpers/scrollTopHelper";
+import Footer from "components/structure/Footer/Footer";
+import SmallButton from "components/globals/buttons/SmallButton";
+import Input from "components/globals/Input";
+import { signup } from "data/pages/LogData";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../state/authSlice";
 
 function Signup() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const inputHandlers: { [key: string]: (value: string) => void } = {
-    'First Name': setFirstName,
-    'Last Name': setLastName,
+    "First Name": setFirstName,
+    "Last Name": setLastName,
     Email: setEmail,
     Password: setPassword,
   };
@@ -27,15 +27,15 @@ function Signup() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       const response = await fetch(
-        'https://gymate-clairekarsenti.onrender.com/auth/register',
+        "https://gymate-clairekarsenti.onrender.com/auth/register",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             firstName,
@@ -48,7 +48,9 @@ function Signup() {
 
       if (response.ok) {
         const userData = await response.json();
-        navigate('/#login');
+        console.log(response.json);
+
+        navigate("/#login");
         dispatch(
           setLogin({
             user: userData.user,
@@ -90,11 +92,11 @@ function Signup() {
                 key={index}
                 {...signUpItem}
                 value={
-                  signUpItem.label === 'First Name'
+                  signUpItem.label === "First Name"
                     ? firstName
-                    : signUpItem.label === 'Last Name'
+                    : signUpItem.label === "Last Name"
                     ? lastName
-                    : signUpItem.label === 'Email'
+                    : signUpItem.label === "Email"
                     ? email
                     : password
                 }

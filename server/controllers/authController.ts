@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
-import jwt, { Secret } from 'jsonwebtoken';
-import User, { UserType } from '../models/User.js';
-import { Request, Response } from 'express';
+import bcrypt from "bcrypt";
+import jwt, { Secret } from "jsonwebtoken";
+import User, { UserType } from "../models/User";
+import { Request, Response } from "express";
 
 /* REGISTER USER */
 export const register = async (
@@ -13,7 +13,7 @@ export const register = async (
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'This user already exists.' });
+      return res.status(400).json({ error: "This user already exists." });
     }
 
     const salt = await bcrypt.genSalt();
@@ -25,17 +25,18 @@ export const register = async (
       email,
       password: passwordHash,
     });
-
+    console.log(newUser + "before saving");
     const savedUser = await newUser.save();
+    console.log(savedUser, "after saving");
 
-    const token = jwt.sign({ userId: savedUser._id }, 'your_secret_token');
+    const token = jwt.sign({ userId: savedUser._id }, "your_secret_token");
 
     return res.status(201).json({ token, user: savedUser });
   } catch (error: unknown) {
     if (error instanceof Error) {
       return res.status(500).json({ error: error.message });
     }
-    return res.status(500).json({ error: 'An error occurred.' });
+    return res.status(500).json({ error: "An error occurred." });
   }
 };
 
@@ -44,10 +45,10 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { email, password } = req.body;
     const user: UserType | null = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: 'User does not exist.' });
+    if (!user) return res.status(400).json({ msg: "User does not exist." });
 
     const isMatch: boolean = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials.' });
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
 
     const token: string = jwt.sign(
       { id: user._id },
@@ -62,6 +63,6 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     if (err instanceof Error) {
       return res.status(500).json({ error: err.message });
     }
-    return res.status(500).json({ error: 'An error occurred.' });
+    return res.status(500).json({ error: "An error occurred." });
   }
 };
